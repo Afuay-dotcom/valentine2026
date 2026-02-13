@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nunt's Gacha 🎲</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;600&display=swap');
+        
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #ffe6f2;
+            background-image: radial-gradient(#ffc2d1 15%, transparent 16%);
+            background-size: 40px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        h1 {
+            color: #d63384;
+            text-shadow: 2px 2px white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .gacha-machine {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 0 #ff8fab, 0 20px 20px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            cursor: pointer;
+            transition: transform 0.1s;
+            border: 5px solid #ff8fab;
+        }
+
+        .gacha-machine:active {
+            transform: scale(0.95) translateY(5px);
+            box-shadow: 0 5px 0 #ff8fab, 0 10px 10px rgba(0,0,0,0.2);
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        .btn-draw {
+            margin-top: 30px;
+            background: linear-gradient(45deg, #ff69b4, #ff8fab);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            font-family: 'Kanit', sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+            transition: 0.2s;
+        }
+
+        .btn-draw:hover { transform: scale(1.05); }
+
+        /* Modal แสดงผลลัพธ์ */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .card-result {
+            background: white;
+            width: 300px;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 5px solid #ddd;
+            position: relative;
+        }
+
+        /* สีขอบการ์ดตามความเกลือ */
+        .rarity-n { border-color: #a0a0a0; } /* เกลือ สีเทา */
+        .rarity-sr { border-color: #ffd700; box-shadow: 0 0 20px #ffd700; } /* ทอง */
+        .rarity-ssr { border-color: #ff00ff; box-shadow: 0 0 30px #ff00ff; } /* รุ้ง */
+
+        .item-icon { font-size: 5rem; display: block; margin-bottom: 10px; }
+        .item-name { font-size: 1.5rem; font-weight: bold; margin-bottom: 10px; }
+        .item-desc { color: #666; font-size: 0.9rem; margin-bottom: 20px; }
+
+        .close-btn {
+            background: #444; color: white; border: none; padding: 10px 20px;
+            border-radius: 10px; cursor: pointer; font-family: 'Kanit', sans-serif;
+        }
+        
+        .ssr-text {
+            color: #ff00ff;
+            animation: rainbow 2s infinite;
+        }
+
+        .home-link {
+            margin-top: 20px;
+            text-decoration: none;
+            color: #d63384;
+            font-weight: bold;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+        @keyframes rainbow { 0% {color: red;} 20% {color: orange;} 40% {color: yellow;} 60% {color: green;} 80% {color: blue;} 100% {color: violet;} }
+    </style>
+</head>
+<body>
+
+    <h1>🔮 สุ่มของขวัญ (Gacha)</h1>
+    <div style="text-align:center; color:#888; margin-bottom:20px;">
+        Rate: SSR 0.5% | SR 1.5% | Salt 98% <br>
+        (ขอให้โชคดีนะคุณนันต์ อิอิ)
+    </div>
+
+    <div class="gacha-machine" id="machine" onclick="drawGacha()">
+        🎁
+    </div>
+
+    <button class="btn-draw" onclick="drawGacha()">กดสุ่ม (ฟรี)</button>
+    <a href="index.html" class="home-link">กลับหน้าหลัก</a>
+
+    <div id="resultModal" class="modal">
+        <div id="resultCard" class="card-result">
+            <div id="itemIcon" class="item-icon"></div>
+            <div id="itemName" class="item-name"></div>
+            <div id="itemDesc" class="item-desc"></div>
+            <button class="close-btn" onclick="closeModal()">ตกลง</button>
+        </div>
+    </div>
+
+    <script>
+        // รายชื่อของเกลือ (98%)
+        const saltItems = [
+            { icon: "🧂", name: "เกลือแกง", desc: "เค็มปี๋เลย... ลองใหม่นะจ๊ะ" },
+            { icon: "💨", name: "อากาศธาตุ", desc: "ว่างเปล่าเหมือนกระเป๋าตังค์ช่วงสิ้นเดือน" },
+            { icon: "👻", name: "ความว่างเปล่า", desc: "ไม่มีอะไรเกิดขึ้น..." },
+            { icon: "🥔", name: "มันฝรั่งทอด", desc: "กินแก้เครียดไปก่อนนะ" },
+            { icon: "🧻", name: "ทิชชู่ 1 แผ่น", desc: "เอาไว้เช็ดน้ำตา... เพราะไม่ได้รางวัลใหญ่" },
+            { icon: "🧱", name: "อิฐก้อนนึง", desc: "เอาไปสร้างบ้านนะ" },
+            { icon: "🥬", name: "ผักชีโรยหน้า", desc: "ไม่ได้รางวัล แต่ได้ผัก" },
+            { icon: "📄", name: "บิลค่าไฟ", desc: "อันนี้เฟิสท์ฝากจ่ายหน่อย" }
+        ];
+
+        // รายชื่อของรางวัล SR (1.5%)
+        const srItems = [
+            { icon: "💆‍♂️", name: "คูปองนวดไหล่", desc: "ฟรี 10 นาที (ห้ามบ่นว่าไม่แรง)" },
+            { icon: "🍿", name: "คูปองเลือกหนัง", desc: "ตาหน้าให้พี่นันต์เลือกหนังได้ 1 เรื่อง" },
+            { icon: "🥤", name: "เลี้ยงน้ำ 1 แก้ว", desc: "เดี๋ยวเฟิสท์เลี้ยงเอง (แก้วเดียวนะ)" }
+        ];
+
+        // รายชื่อของรางวัล SSR (0.5%) - แรร์ไอเทม!
+        const ssrItem = { 
+            icon: "👑", 
+            name: "คูปองตามใจนันต์ 1 วัน", 
+            desc: "SSR Item! สั่งอะไรก็ได้เฟิสท์ทำให้หมด (ภายใน 1 วัน) *ใช้ได้ครั้งเดียว ไม่มีวันหมดอายุ*" 
+        };
+
+        function drawGacha() {
+            const machine = document.getElementById('machine');
+            machine.classList.add('shake'); // สั่นกล่อง
+
+            // รอ 0.5 วิ (ให้สั่นเสร็จ) แล้วค่อยออกผล
+            setTimeout(() => {
+                machine.classList.remove('shake');
+                showResult();
+            }, 500);
+        }
+
+        function showResult() {
+            // สุ่มตัวเลข 0 - 100
+            const chance = Math.random() * 100;
+            let result;
+            let rarityClass;
+
+            // คำนวณความเกลือ
+            if (chance < 0.5) { 
+                // 0.5% ได้ SSR
+                result = ssrItem;
+                rarityClass = 'rarity-ssr';
+            } else if (chance < 2.0) { 
+                // 1.5% ได้ SR (รวมเป็น 2%)
+                result = srItems[Math.floor(Math.random() * srItems.length)];
+                rarityClass = 'rarity-sr';
+            } else {
+                // 98% เกลือล้วนๆ
+                result = saltItems[Math.floor(Math.random() * saltItems.length)];
+                rarityClass = 'rarity-n';
+            }
+
+            // แสดงผล
+            const card = document.getElementById('resultCard');
+            card.className = 'card-result ' + rarityClass; // เปลี่ยนสีขอบตามความเกลือ
+            
+            document.getElementById('itemIcon').innerText = result.icon;
+            
+            // ถ้าเป็น SSR ให้ชื่อเป็นสีรุ้ง
+            const nameEl = document.getElementById('itemName');
+            nameEl.innerText = result.name;
+            if (rarityClass === 'rarity-ssr') nameEl.classList.add('ssr-text');
+            else nameEl.classList.remove('ssr-text');
+
+            document.getElementById('itemDesc').innerText = result.desc;
+            
+            document.getElementById('resultModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('resultModal').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
