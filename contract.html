@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Service Renewal ✍️</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;500;600&display=swap');
         
         body {
             font-family: 'Kanit', sans-serif;
-            /* เปลี่ยนพื้นหลังให้เหมือนหน้า Profile */
             background-color: #fff0f5;
             background-image: radial-gradient(#ffccd5 10%, transparent 10%);
             background-size: 30px 30px;
@@ -26,15 +27,14 @@
             width: 80%;
             max-width: 450px;
             padding: 40px;
-            /* เปลี่ยนเงาและขอบให้มนขึ้น */
             box-shadow: 0 10px 25px rgba(255, 105, 180, 0.15);
             border-radius: 20px;
             position: relative;
             text-align: center;
             border: 2px solid #fff;
+            z-index: 10;
         }
 
-        /* เพิ่มแถบสีชมพูด้านบนเหมือนหน้า Profile */
         .paper::before {
             content: '';
             position: absolute;
@@ -43,20 +43,13 @@
             border-radius: 20px 20px 0 0;
         }
 
-        /* เอาลายรอยปรุออก เพื่อให้ดูคลีนเหมือนกัน */
-        /* .paper::after { ... } */
-
-        h2 { 
-            color: #d63384; /* เปลี่ยนเป็นสีชมพูเข้ม */
-            margin-bottom: 5px; 
-            font-weight: 600;
-        }
+        h2 { color: #d63384; margin-bottom: 5px; font-weight: 600; }
         p { color: #666; margin-bottom: 20px; line-height: 1.5; }
 
         .checklist {
             text-align: left;
-            background: #fff5f5; /* เปลี่ยนพื้นหลังกล่องเป็นชมพูอ่อน */
-            border: 1px dashed #ffccd5; /* เพิ่มขอบเส้นประน่ารักๆ */
+            background: #fff5f5;
+            border: 1px dashed #ffccd5;
             padding: 25px;
             border-radius: 15px;
             margin-bottom: 25px;
@@ -76,7 +69,7 @@
         button {
             padding: 12px 25px;
             border: none;
-            border-radius: 50px; /* ปุ่มกลมมน */
+            border-radius: 50px;
             cursor: pointer;
             font-family: 'Kanit', sans-serif;
             font-size: 1rem;
@@ -84,7 +77,6 @@
             font-weight: 500;
         }
 
-        /* ปุ่มตกลงแบบไล่สีชมพู */
         .yes-btn { 
             background: linear-gradient(45deg, #ff8fab, #ffb7c5);
             color: white;
@@ -95,11 +87,7 @@
             box-shadow: 0 6px 15px rgba(255, 143, 171, 0.6);
         }
 
-        .no-btn { 
-            background: #eee; 
-            color: #777; 
-            position: relative; 
-        }
+        .no-btn { background: #eee; color: #777; position: relative; }
         
         .home-link {
             display: block;
@@ -110,6 +98,73 @@
             transition: 0.2s;
         }
         .home-link:hover { color: #ff8fab; }
+
+        /* --- ส่วนที่เพิ่มใหม่: Custom Modal (หน้าต่างเด้ง) --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.6); /* พื้นหลังเบลอๆ ขาวๆ */
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-box {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(255, 105, 180, 0.3);
+            text-align: center;
+            max-width: 80%;
+            width: 300px;
+            border: 4px solid #ffccd5;
+            animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 15px;
+            animation: bounce 1s infinite;
+        }
+
+        .modal-title {
+            color: #d63384;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .modal-desc {
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .close-modal-btn {
+            background: #ff8fab;
+            color: white;
+            padding: 10px 30px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .close-modal-btn:hover { background: #ff5c8d; }
+
+        /* Animation */
+        @keyframes popUp {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
     </style>
 </head>
 <body>
@@ -141,20 +196,77 @@
         <a href="index.html" class="home-link">กลับหน้าหลัก</a>
     </div>
 
+    <div id="customModal" class="modal-overlay">
+        <div class="modal-box">
+            <span id="modalIcon" class="modal-icon">💖</span>
+            <div id="modalTitle" class="modal-title">Title</div>
+            <div id="modalDesc" class="modal-desc">Description</div>
+            <button class="close-modal-btn" onclick="closeModal()">ตกลงค้าบ</button>
+        </div>
+    </div>
+
     <script>
         function sayYes() {
-            alert("ขอบคุณที่ใช้บริการ! 💖\nสัญญาเริ่มทำงานทันที... \nสัญญาฉบับนี้ไม่มีวันหมดอายุนะคะ จนกว่าจะทำสัญญาใจฉบับใหม่แบร่ๆๆๆ!");
+            // เรียกพลุกระดาษออกมาฉลอง! 🎉
+            launchConfetti();
+
+            // แสดง Pop-up น่ารักๆ
+            showModal(
+                "🎉 บันทึกสำเร็จ!", 
+                "ขอบคุณที่ใช้บริการ! 💖<br>สัญญาเริ่มทำงานทันที...<br>สัญญาฉบับนี้ไม่มีวันหมดอายุนะคะ<br>จนกว่าจะทำสัญญาใจฉบับใหม่แบร่ๆๆๆ!"
+            );
         }
 
         function sayNo() {
-            alert("ปุ่มนี้กดไม่ได้หรอก! 😜");
+            // ถ้ากดได้ (ในมือถือ) ก็จะขึ้นแจ้งเตือนกวนๆ
+            showModal(
+                "😜 แบร่!",
+                "ปุ่มนี้เป็นแค่ภาพลวงตา...<br>ระบบไม่อนุญาตให้ปฏิเสธเจ้าเฟิสท์!"
+            );
+        }
+
+        // ฟังก์ชันแสดง Modal
+        function showModal(title, desc) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDesc').innerHTML = desc; // ใช้ innerHTML เพื่อให้ขึ้นบรรทัดใหม่ได้
+            document.getElementById('customModal').style.display = 'flex';
+        }
+
+        // ฟังก์ชันปิด Modal
+        function closeModal() {
+            document.getElementById('customModal').style.display = 'none';
         }
 
         // ฟังก์ชันทำให้ปุ่มหนี (PC)
         function moveBtn(btn) {
-            const x = Math.random() * 200 - 100; // สุ่มซ้ายขวา
-            const y = Math.random() * 200 - 100; // สุ่มบนล่าง
+            const x = Math.random() * 200 - 100;
+            const y = Math.random() * 200 - 100;
             btn.style.transform = `translate(${x}px, ${y}px)`;
+        }
+
+        // ฟังก์ชันยิงพลุกระดาษ (Confetti)
+        function launchConfetti() {
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 999 };
+
+            function randomInOut(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                
+                // ยิงพลุจาก 2 ข้างจอ
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInOut(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInOut(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
         }
     </script>
 
