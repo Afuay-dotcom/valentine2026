@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First's User Manual 📖</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;500;600&display=swap');
+        
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #fff0f5;
+            background-image: radial-gradient(#ffccd5 10%, transparent 10%);
+            background-size: 30px 30px;
+            color: #444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .manual-card {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.15);
+            border: 2px solid #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* แถบสีด้านบน */
+        .manual-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 10px;
+            background: linear-gradient(90deg, #ff8fab, #ffc2d1);
+        }
+
+        h1 { 
+            color: #d63384; 
+            text-align: center; 
+            margin-bottom: 5px;
+            font-size: 1.8rem;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #ff69b4;
+            margin-top: 25px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px dashed #ffccd5;
+            padding-bottom: 5px;
+        }
+
+        ul { padding-left: 20px; line-height: 1.7; }
+        li { margin-bottom: 8px; font-weight: 300; }
+
+        strong { font-weight: 500; color: #555; }
+
+        /* ไฮไลท์คำสำคัญ */
+        .highlight {
+            background-color: #ffe6e6;
+            color: #d63384;
+            padding: 0 6px;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+
+        .warning-box {
+            background-color: #fff5f5;
+            border-left: 4px solid #ff6b6b;
+            padding: 15px;
+            margin-top: 25px;
+            font-size: 0.9rem;
+            color: #c0392b;
+            line-height: 1.6;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .secret-note {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border: 1px dashed #ccc;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+            font-style: italic;
+            position: relative;
+        }
+        
+        /* ไอคอนหัวใจตกแต่ง */
+        .secret-note::after {
+            content: '❤️';
+            position: absolute;
+            bottom: -10px; right: -10px;
+            font-size: 1.5rem;
+            transform: rotate(15deg);
+        }
+
+        .back-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: linear-gradient(45deg, #ff8fab, #ffb7c5);
+            color: white;
+            padding: 14px 0;
+            border-radius: 50px;
+            text-decoration: none;
+            margin-top: 25px;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(255, 143, 171, 0.4);
+            font-weight: 500;
+        }
+        .back-btn:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 15px rgba(255, 143, 171, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="manual-card">
+        <h1>คู่มือการใช้งาน: เฟิสท์</h1>
+        <div class="subtitle">Version 2026 ✨</div>
+        
+        <div class="section-title">🔮 ข้อมูลจำเพาะ </div>
+        <ul>
+            <li><strong>ภายนอก :</strong> ดูชิลๆ อินดี้ เข้าถึงยาก เหมือนไม่แคร์โลก... <br>
+                <span style="font-size: 0.9rem; color: #888;">(แต่จริงๆ แอบสแกนคนอยู่ตลอดเวลานะ)</span>
+            </li>
+            <li><strong>ภายใน :</strong> จริงๆ เป็นเด็กเอาแต่ใจ ขี้ใจร้อน 
+                <span class="highlight">อยากได้ความรักเดี๋ยวนี้!</span> รักแรง หึงแรง (แต่ฟอร์มเยอะ ไม่พูดหรอก)
+            </li>
+            <li><strong>ระบบความคิด :</strong> <br>
+                เป็นคนปากไวพูดอะไรไปเรื่อยดูร่าเริง แต่ในหัวมีเรื่องให้คิดเยอะมากกกก เก็บความรู้สึกเก่ง ชอบแอบไปน้อยใจคนเดียวเงียบๆ 
+            </li>
+        </ul>
+
+        <div class="section-title">🔋 วิธีชาร์จแบต (Charging)</div>
+        <ul>
+            <li>ต้องการ <b>"กอดแน่นๆ"</b> และ <b>"หอมหัว"</b> บ่อยๆ (เพราะลึกๆ ขี้เหงามาก แต่ปากแข็งไม่ยอมบอก)</li>
+            <li>ชอบคน <b>"ตามใจ"</b> แบบสุดๆ </li>
+            <li>ถ้าได้ยินคำชม หรือคำพูดดีๆ แบตจะเต็ม 100% ทันที</li>
+        </ul>
+
+        <div class="section-title">🛠️ การแก้ปัญหา (Troubleshooting)</div>
+        <ul>
+            <li><b>ถ้าเฟิสท์ "เงียบ":</b> (System Critical ⚠️) <br> แปลว่าคุณนันต์พูดไม่เข้าหู หรือทำอะไรผิดสักอย่าง! ห้ามปล่อยเบลอ ต้องง้อด่วน</li>
+            <li><b>ถ้าเฟิสท์ "งอแง":</b> แปลว่าเกราะแตกแล้ว... จริงๆ คืออยากอ้อน ห้ามดุกลับนะ!</li>
+        </ul>
+
+        <div class="warning-box">
+            <strong>⚠️ คำเตือนสำคัญ:</strong><br>
+            1. ระบบนี้แพ้ "ของเผ็ด" <br>
+            2. ห้ามโกหก (จับผิดเก่งมาก มีเซนส์แม่นเหมือนแม่มด)<br>
+            3. ถึงจะดูเหมือนอยู่คนเดียวได้... แต่จริงๆ <span class="highlight">ขาดคุณนันต์ไม่ได้หรอก</span> แบร่ๆ
+        </div>
+
+        <div class="secret-note">
+            "เฟิสท์รู้ตัวว่าเฟิสท์เข้าใจยาก ปากไม่ตรงกับใจ อธิบายสิ่งที่ตัวเองรู้สึกก็ไม่เก่ง...<br>
+            แต่ที่ทำเว็บนี้ให้ เพราะอยากให้รู้ว่า <b>รักคุณนันต์มากนะ</b><br>
+            ช่วยดูแลกันไปนานๆ นะคะ" 
+        </div>
+
+        <a href="index.html" class="back-btn">รับทราบ! (กลับหน้าหลัก)</a>
+    </div>
+
+</body>
+</html>

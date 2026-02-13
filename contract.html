@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Renewal ✍️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;500;600&display=swap');
+        
+        body {
+            font-family: 'Kanit', sans-serif;
+            /* เปลี่ยนพื้นหลังให้เหมือนหน้า Profile */
+            background-color: #fff0f5;
+            background-image: radial-gradient(#ffccd5 10%, transparent 10%);
+            background-size: 30px 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .paper {
+            background: white;
+            width: 80%;
+            max-width: 450px;
+            padding: 40px;
+            /* เปลี่ยนเงาและขอบให้มนขึ้น */
+            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.15);
+            border-radius: 20px;
+            position: relative;
+            text-align: center;
+            border: 2px solid #fff;
+        }
+
+        /* เพิ่มแถบสีชมพูด้านบนเหมือนหน้า Profile */
+        .paper::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 10px;
+            background: linear-gradient(90deg, #ff8fab, #ffc2d1);
+            border-radius: 20px 20px 0 0;
+        }
+
+        /* เอาลายรอยปรุออก เพื่อให้ดูคลีนเหมือนกัน */
+        /* .paper::after { ... } */
+
+        h2 { 
+            color: #d63384; /* เปลี่ยนเป็นสีชมพูเข้ม */
+            margin-bottom: 5px; 
+            font-weight: 600;
+        }
+        p { color: #666; margin-bottom: 20px; line-height: 1.5; }
+
+        .checklist {
+            text-align: left;
+            background: #fff5f5; /* เปลี่ยนพื้นหลังกล่องเป็นชมพูอ่อน */
+            border: 1px dashed #ffccd5; /* เพิ่มขอบเส้นประน่ารักๆ */
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        strong { color: #d63384; font-weight: 600; }
+
+        .btn-zone {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px; /* ปุ่มกลมมน */
+            cursor: pointer;
+            font-family: 'Kanit', sans-serif;
+            font-size: 1rem;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        /* ปุ่มตกลงแบบไล่สีชมพู */
+        .yes-btn { 
+            background: linear-gradient(45deg, #ff8fab, #ffb7c5);
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 143, 171, 0.4);
+        }
+        .yes-btn:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 15px rgba(255, 143, 171, 0.6);
+        }
+
+        .no-btn { 
+            background: #eee; 
+            color: #777; 
+            position: relative; 
+        }
+        
+        .home-link {
+            display: block;
+            margin-top: 30px;
+            color: #aaa;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        .home-link:hover { color: #ff8fab; }
+    </style>
+</head>
+<body>
+
+    <div class="paper">
+        <h2>📑 สัญญาต่ออายุ (Renewal)</h2>
+        <p>เรียน คุณนันต์<br>เนื่องในโอกาสวันวาเลนไทน์ ระบบขอสอบถามความสมัครใจในการ "ดูแลเจ้าเฟิสท์" ต่อไป</p>
+
+        <div class="checklist">
+            <strong>✅ สิ่งที่คุณนันต์จะได้รับ:</strong>
+            <br>- คนคุยที่น่ารัก (และเด็กเกาะเบาะ) 1 ea
+            <br>- เพื่อนเล่นเกม (ที่อาจจะพาแพ้บ้าง)
+            <br>- กำลังใจดีๆ เวลาเหนื่อย
+            <br>- แม่หมอประจำตัว หาอ่านพื้นดวง 2 วันต่อสัปดาห์
+            <br>- คนตีกับโค้ด บ่นไปทำไป เผลอๆ ร้องไห้
+            <br><br>
+            <strong>🔔 เงื่อนไข:</strong>
+            <br>- ห้ามหาย ห้ามเมิน ถ้าดื้อดุได้เลยชอบ
+            <br>- สัญญานี้ต่ออายุอัตโนมัติทุกวัน ❤️
+        </div>
+
+        <p>จะ "ต่อสัญญา" มั้ยคะ?</p>
+
+        <div class="btn-zone">
+            <button class="yes-btn" onclick="sayYes()">✅ ต่อสัญญาแน่นอน</button>
+            <button class="no-btn" onmouseover="moveBtn(this)" onclick="sayNo()">❌ ขอคิดดูก่อน</button>
+        </div>
+
+        <a href="index.html" class="home-link">กลับหน้าหลัก</a>
+    </div>
+
+    <script>
+        function sayYes() {
+            alert("ขอบคุณที่ใช้บริการ! 💖\nสัญญาเริ่มทำงานทันที... \nสัญญาฉบับนี้ไม่มีวันหมดอายุนะคะ จนกว่าจะทำสัญญาใจฉบับใหม่แบร่ๆๆๆ!");
+        }
+
+        function sayNo() {
+            alert("ปุ่มนี้กดไม่ได้หรอก! 😜");
+        }
+
+        // ฟังก์ชันทำให้ปุ่มหนี (PC)
+        function moveBtn(btn) {
+            const x = Math.random() * 200 - 100; // สุ่มซ้ายขวา
+            const y = Math.random() * 200 - 100; // สุ่มบนล่าง
+            btn.style.transform = `translate(${x}px, ${y}px)`;
+        }
+    </script>
+
+</body>
+</html>
