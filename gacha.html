@@ -50,12 +50,15 @@
             box-shadow: 0 5px 0 #ff8fab, 0 10px 10px rgba(0,0,0,0.2);
         }
 
-        .shake {
-            animation: shake 0.5s;
+        .shake { animation: shake 0.5s; }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
         }
 
         .btn-draw {
-            margin-top: 30px;
             background: linear-gradient(45deg, #ff69b4, #ff8fab);
             color: white;
             border: none;
@@ -69,9 +72,21 @@
             transition: 0.2s;
         }
 
-        .btn-draw:hover { transform: scale(1.05); }
+        .btn-history {
+            background: white;
+            color: #d63384;
+            border: 2px solid #ff8fab;
+            padding: 15px 20px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Kanit', sans-serif;
+            transition: 0.2s;
+        }
 
-        /* Modal แสดงผลลัพธ์ */
+        .btn-draw:hover, .btn-history:hover { transform: scale(1.05); }
+
+        /* Modal ทั่วไป */
         .modal {
             display: none;
             position: fixed;
@@ -93,10 +108,49 @@
             position: relative;
         }
 
+        /* Modal ประวัติ */
+        .history-card {
+            background: white;
+            width: 85%;
+            max-width: 400px;
+            height: 60vh;
+            padding: 20px;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.3s;
+        }
+
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+            text-align: left;
+            margin-top: 10px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .history-item:last-child { border-bottom: none; }
+        
+        .h-time { font-size: 0.8rem; color: #aaa; min-width: 50px; }
+        .h-name { font-weight: 500; color: #555; }
+        
+        .badge-ssr { background: #ff00ff; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
+        .badge-sr { background: #ffd700; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
+        .badge-salt { background: #aaa; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
+
         /* สีขอบการ์ดตามความเกลือ */
-        .rarity-n { border-color: #a0a0a0; } /* เกลือ สีเทา */
-        .rarity-sr { border-color: #ffd700; box-shadow: 0 0 20px #ffd700; } /* ทอง */
-        .rarity-ssr { border-color: #ff00ff; box-shadow: 0 0 30px #ff00ff; } /* รุ้ง */
+        .rarity-n { border-color: #a0a0a0; }
+        .rarity-sr { border-color: #ffd700; box-shadow: 0 0 20px #ffd700; }
+        .rarity-ssr { border-color: #ff00ff; box-shadow: 0 0 30px #ff00ff; }
 
         .item-icon { font-size: 5rem; display: block; margin-bottom: 10px; }
         .item-name { font-size: 1.5rem; font-weight: bold; margin-bottom: 10px; }
@@ -105,51 +159,43 @@
         .close-btn {
             background: #444; color: white; border: none; padding: 10px 20px;
             border-radius: 10px; cursor: pointer; font-family: 'Kanit', sans-serif;
-        }
-        
-        .ssr-text {
-            color: #ff00ff;
-            animation: rainbow 2s infinite;
+            margin-top: 10px;
         }
 
-        .home-link {
-            margin-top: 20px;
-            text-decoration: none;
-            color: #d63384;
-            font-weight: bold;
+        .clear-btn {
+            background: #ffcccc; color: #d63384; border: none; padding: 8px 15px;
+            border-radius: 5px; cursor: pointer; font-size: 0.9rem; margin-top: 10px;
         }
+        
+        .ssr-text { color: #ff00ff; animation: rainbow 2s infinite; }
+        .home-link { margin-top: 20px; text-decoration: none; color: #d63384; font-weight: bold; }
 
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
             10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
             50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
-
         @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
-        @keyframes rainbow { 0% {color: red;} 20% {color: orange;} 40% {color: yellow;} 60% {color: green;} 80% {color: blue;} 100% {color: violet;} }
+        @keyframes slideUp { 0% { transform: translateY(100%); } 100% { transform: translateY(0); } }
+        @keyframes rainbow { 0% {color: red;} 50% {color: blue;} 100% {color: violet;} }
     </style>
 </head>
 <body>
 
     <h1>🔮 สุ่มของขวัญ (Gacha)</h1>
     <div style="text-align:center; color:#888; margin-bottom:20px;">
-        Rate: SSR 0.5% | SR 1.5% | Salt 98% <br>
-        (ขอให้โชคดีนะคุณนันต์ อิอิ)
+        Rate: SSR 5% | SR 25% | Salt 70% <br>
+        (วัดดวงกันหน่อยยย!)
     </div>
 
-    <div class="gacha-machine" id="machine" onclick="drawGacha()">
-        🎁
-    </div>
+    <div class="gacha-machine" id="machine" onclick="drawGacha()">🎁</div>
 
-    <button class="btn-draw" onclick="drawGacha()">กดสุ่ม (ฟรี)</button>
+    <div class="btn-group">
+        <button class="btn-history" onclick="openHistory()">📜 กระเป๋า</button>
+        <button class="btn-draw" onclick="drawGacha()">กดสุ่ม</button>
+    </div>
+    
     <a href="index.html" class="home-link">กลับหน้าหลัก</a>
 
     <div id="resultModal" class="modal">
@@ -161,8 +207,20 @@
         </div>
     </div>
 
+    <div id="historyModal" class="modal">
+        <div class="history-card">
+            <h2 style="margin:0; color:#d63384;">📦 กระเป๋าของรางวัล</h2>
+            <div class="history-list" id="historyList">
+                </div>
+            <div style="display:flex; justify-content:space-between;">
+                <button class="clear-btn" onclick="clearHistory()">ล้างประวัติ</button>
+                <button class="close-btn" onclick="closeHistory()">ปิด</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // รายชื่อของเกลือ (98%)
+        // รายชื่อของรางวัล (เหมือนเดิม)
         const saltItems = [
             { icon: "🧂", name: "เกลือแกง", desc: "เค็มปี๋เลย... ลองใหม่นะจ๊ะ" },
             { icon: "💨", name: "อากาศธาตุ", desc: "ว่างเปล่าเหมือนกระเป๋าตังค์ช่วงสิ้นเดือน" },
@@ -174,25 +232,20 @@
             { icon: "📄", name: "บิลค่าไฟ", desc: "อันนี้เฟิสท์ฝากจ่ายหน่อย" }
         ];
 
-        // รายชื่อของรางวัล SR (1.5%)
         const srItems = [
-            { icon: "💆‍♂️", name: "คูปองนวดไหล่", desc: "ฟรี 10 นาที (ห้ามบ่นว่าไม่แรง)" },
-            { icon: "🍿", name: "คูปองเลือกหนัง", desc: "ตาหน้าให้พี่นันต์เลือกหนังได้ 1 เรื่อง" },
-            { icon: "🥤", name: "เลี้ยงน้ำ 1 แก้ว", desc: "เดี๋ยวเฟิสท์เลี้ยงเอง (แก้วเดียวนะ)" }
+            { icon: "🛌", name: "คูปองเข้านอนเร็ว", desc: "คืนนี้เฟิสท์จะเป็นเด็กดี รีบไปนอนไวๆ ไม่ดื้อ!" },
+            { icon: "😇", name: "คูปองงดโวยวาย", desc: "1 วันเต็ม! เฟิสท์จะไม่บ่น ไม่วีน ยอมคุณนันต์ทุกอย่าง" }
         ];
 
-        // รายชื่อของรางวัล SSR (0.5%) - แรร์ไอเทม!
         const ssrItem = { 
-            icon: "👑", 
-            name: "คูปองตามใจนันต์ 1 วัน", 
-            desc: "SSR Item! สั่งอะไรก็ได้เฟิสท์ทำให้หมด (ภายใน 1 วัน) *ใช้ได้ครั้งเดียว ไม่มีวันหมดอายุ*" 
+            icon: "👑", name: "คูปองตามใจนันต์ 1 วัน", 
+            desc: "SSR Item! สั่งอะไรก็ได้เฟิสท์ทำให้หมด (ภายใน 1 วัน) *ใช้ได้ครั้งเดียว*" 
         };
 
+        // ฟังก์ชันสุ่ม (เหมือนเดิม)
         function drawGacha() {
             const machine = document.getElementById('machine');
-            machine.classList.add('shake'); // สั่นกล่อง
-
-            // รอ 0.5 วิ (ให้สั่นเสร็จ) แล้วค่อยออกผล
+            machine.classList.add('shake');
             setTimeout(() => {
                 machine.classList.remove('shake');
                 showResult();
@@ -200,46 +253,90 @@
         }
 
         function showResult() {
-            // สุ่มตัวเลข 0 - 100
             const chance = Math.random() * 100;
             let result;
             let rarityClass;
+            let badge;
 
-            // คำนวณความเกลือ
-            if (chance < 0.5) { 
-                // 0.5% ได้ SSR
-                result = ssrItem;
-                rarityClass = 'rarity-ssr';
-            } else if (chance < 2.0) { 
-                // 1.5% ได้ SR (รวมเป็น 2%)
-                result = srItems[Math.floor(Math.random() * srItems.length)];
-                rarityClass = 'rarity-sr';
+            if (chance < 5) { 
+                result = ssrItem; rarityClass = 'rarity-ssr'; badge = 'SSR';
+            } else if (chance < 30) { 
+                result = srItems[Math.floor(Math.random() * srItems.length)]; rarityClass = 'rarity-sr'; badge = 'SR';
             } else {
-                // 98% เกลือล้วนๆ
-                result = saltItems[Math.floor(Math.random() * saltItems.length)];
-                rarityClass = 'rarity-n';
+                result = saltItems[Math.floor(Math.random() * saltItems.length)]; rarityClass = 'rarity-n'; badge = 'Salt';
             }
+
+            // --- ส่วนที่เพิ่ม: บันทึกลงเครื่อง ---
+            saveToHistory(result.name, result.icon, badge);
 
             // แสดงผล
             const card = document.getElementById('resultCard');
-            card.className = 'card-result ' + rarityClass; // เปลี่ยนสีขอบตามความเกลือ
-            
+            card.className = 'card-result ' + rarityClass;
             document.getElementById('itemIcon').innerText = result.icon;
             
-            // ถ้าเป็น SSR ให้ชื่อเป็นสีรุ้ง
             const nameEl = document.getElementById('itemName');
             nameEl.innerText = result.name;
             if (rarityClass === 'rarity-ssr') nameEl.classList.add('ssr-text');
             else nameEl.classList.remove('ssr-text');
 
             document.getElementById('itemDesc').innerText = result.desc;
-            
             document.getElementById('resultModal').style.display = 'flex';
         }
 
-        function closeModal() {
-            document.getElementById('resultModal').style.display = 'none';
+        // --- ระบบบันทึกประวัติ (Local Storage) ---
+        function saveToHistory(name, icon, rarity) {
+            // ดึงข้อมูลเก่าออกมา (ถ้าไม่มีให้สร้างอาเรย์ว่าง)
+            let history = JSON.parse(localStorage.getItem('nunt_gacha_history')) || [];
+            
+            // สร้างข้อมูลใหม่
+            const newItem = {
+                name: name,
+                icon: icon,
+                rarity: rarity,
+                time: new Date().toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'})
+            };
+
+            // ใส่ไว้หน้าสุด (อันล่าสุดอยู่บน)
+            history.unshift(newItem);
+
+            // บันทึกกลับลงเครื่อง
+            localStorage.setItem('nunt_gacha_history', JSON.stringify(history));
         }
+
+        function openHistory() {
+            const listEl = document.getElementById('historyList');
+            listEl.innerHTML = ""; // เคลียร์ของเก่า
+            
+            const history = JSON.parse(localStorage.getItem('nunt_gacha_history')) || [];
+
+            if (history.length === 0) {
+                listEl.innerHTML = "<div style='text-align:center; margin-top:50px; color:#aaa;'>ยังไม่มีของรางวัลเลย...<br>ไปสุ่มก่อนสิ!</div>";
+            } else {
+                history.forEach(item => {
+                    let badgeClass = item.rarity === 'SSR' ? 'badge-ssr' : (item.rarity === 'SR' ? 'badge-sr' : 'badge-salt');
+                    
+                    listEl.innerHTML += `
+                        <div class="history-item">
+                            <span class="h-time">${item.time}</span>
+                            <span class="${badgeClass}">${item.rarity}</span>
+                            <span style="font-size:1.2rem;">${item.icon}</span>
+                            <span class="h-name">${item.name}</span>
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById('historyModal').style.display = 'flex';
+        }
+
+        function clearHistory() {
+            if(confirm("จะลบประวัติทั้งหมดจริงหรอ? ของหายหมดนะ!")) {
+                localStorage.removeItem('nunt_gacha_history');
+                openHistory(); // รีเฟรชหน้าประวัติ
+            }
+        }
+
+        function closeModal() { document.getElementById('resultModal').style.display = 'none'; }
+        function closeHistory() { document.getElementById('historyModal').style.display = 'none'; }
     </script>
 
 </body>
