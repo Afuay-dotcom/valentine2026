@@ -12,6 +12,8 @@
             background-color: #ffeff6; /* ชมพูพาสเทล */
             text-align: center;
             padding: 50px;
+            margin: 0;
+            overflow: hidden; /* ป้องกันไม่ให้มี Scrollbar เกิน */
         }
 
         .container {
@@ -22,19 +24,12 @@
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(255, 105, 180, 0.3);
             border: 3px solid #ff8fab;
+            position: relative;
+            z-index: 10; /* ให้กล่องเนื้อหาอยู่เหนือหัวใจ */
         }
 
-        h1 { color: #d63384; }
-        p { color: #666; }
-
-        .profile-pic {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%; /* ทำเป็นวงกลม */
-            object-fit: cover;
-            border: 5px solid #ffccd5;
-            margin-bottom: 20px;
-        }
+        h1 { color: #d63384; margin-bottom: 10px; }
+        p { color: #666; margin-bottom: 30px; }
 
         .menu-btn {
             display: block;
@@ -46,15 +41,58 @@
             border-radius: 10px;
             font-size: 1.2rem;
             transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(255, 143, 171, 0.3);
         }
 
         .menu-btn:hover {
             background: #fb6f92;
             transform: scale(1.05); /* ขยายใหญ่ขึ้นตอนเอาเมาส์ชี้ */
         }
+
+        /* --- ส่วน Animation หัวใจลอย --- */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* อยู่ข้างหลังสุด */
+            pointer-events: none; /* กดทะลุได้ ไม่บังปุ่ม */
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            background-color: rgba(255, 182, 193, 0.6); /* สีชมพูจางๆ */
+            width: 20px;
+            height: 20px;
+            transform: rotate(45deg);
+            animation: floatUp 10s linear infinite;
+        }
+
+        /* สร้างรูปทรงหัวใจด้วย CSS */
+        .heart::before, .heart::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: inherit;
+            border-radius: 50%;
+        }
+
+        .heart::before { top: -10px; left: 0; }
+        .heart::after { top: 0; left: -10px; }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(45deg) scale(0.5); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) rotate(45deg) scale(1.2); opacity: 0; }
+        }
     </style>
 </head>
 <body>
+
+    <div class="bg-animation" id="bgAnimation"></div>
 
     <div class="container">
         
@@ -65,6 +103,31 @@
         <a href="contract.html" class="menu-btn">✍️ สัญญาใจอะฮุฮิฮุฮิ (Click!)</a>
         <a href="gacha.html" class="menu-btn">🎁 เสี่ยงโชคสุ่มของขวัญ (Click!)</a>
     </div>
+
+    <script>
+        const bg = document.getElementById('bgAnimation');
+        const heartCount = 20; // จำนวนหัวใจที่จะลอยขึ้นมา (อยากได้เยอะแก้เลขตรงนี้)
+
+        for (let i = 0; i < heartCount; i++) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            
+            // สุ่มตำแหน่งเริ่ม (ซ้าย-ขวา)
+            heart.style.left = Math.random() * 100 + 'vw';
+            
+            // สุ่มความเร็ว (ลอยช้า-เร็วต่างกัน)
+            heart.style.animationDuration = Math.random() * 5 + 6 + 's'; 
+            
+            // สุ่มเวลาเริ่ม (ไม่ให้ขึ้นพร้อมกันหมด)
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            
+            // สุ่มขนาดเล็ก-ใหญ่
+            const scale = Math.random() * 0.5 + 0.5; // ขนาด 0.5 ถึง 1.0
+            heart.style.transform = `rotate(45deg) scale(${scale})`;
+
+            bg.appendChild(heart);
+        }
+    </script>
 
 </body>
 </html>
