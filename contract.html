@@ -99,12 +99,12 @@
         }
         .home-link:hover { color: #ff8fab; }
 
-        /* --- ส่วนที่เพิ่มใหม่: Custom Modal (หน้าต่างเด้ง) --- */
+        /* --- Custom Modal --- */
         .modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.6); /* พื้นหลังเบลอๆ ขาวๆ */
+            background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(5px);
             z-index: 100;
             justify-content: center;
@@ -157,11 +157,7 @@
         }
         .close-modal-btn:hover { background: #ff5c8d; }
 
-        /* Animation */
-        @keyframes popUp {
-            from { transform: scale(0.5); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
+        @keyframes popUp { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
@@ -170,7 +166,7 @@
 <body>
 
     <div class="paper">
-        <h2>📑 สัญญาต่ออายุ (Renewal)</h2>
+        <h2>📑 สัญญาต่ออายุ</h2>
         <p>เรียน คุณนันต์<br>เนื่องในโอกาสวันวาเลนไทน์ ระบบขอสอบถามความสมัครใจในการ "ดูแลเจ้าเฟิสท์" ต่อไป</p>
 
         <div class="checklist">
@@ -206,11 +202,12 @@
     </div>
 
     <script>
-        function sayYes() {
-            // เรียกพลุกระดาษออกมาฉลอง! 🎉
-            launchConfetti();
+        // ตัวแปรเช็คว่ากดมาจากปุ่ม Yes หรือเปล่า
+        let isSuccess = false;
 
-            // แสดง Pop-up น่ารักๆ
+        function sayYes() {
+            launchConfetti();
+            isSuccess = true; // ตั้งค่าว่าสำเร็จแล้ว
             showModal(
                 "🎉 บันทึกสำเร็จ!", 
                 "ขอบคุณที่ใช้บริการ! 💖<br>สัญญาเริ่มทำงานทันที...<br>สัญญาฉบับนี้ไม่มีวันหมดอายุนะคะ<br>จนกว่าจะทำสัญญาใจฉบับใหม่แบร่ๆๆๆ!"
@@ -218,52 +215,45 @@
         }
 
         function sayNo() {
-            // ถ้ากดได้ (ในมือถือ) ก็จะขึ้นแจ้งเตือนกวนๆ
+            isSuccess = false; // ตั้งค่าว่ายังไม่สำเร็จ (แกล้ง)
             showModal(
                 "😜 แบร่!",
                 "ปุ่มนี้เป็นแค่ภาพลวงตา...<br>ระบบไม่อนุญาตให้ปฏิเสธเจ้าเฟิสท์!"
             );
         }
 
-        // ฟังก์ชันแสดง Modal
         function showModal(title, desc) {
             document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalDesc').innerHTML = desc; // ใช้ innerHTML เพื่อให้ขึ้นบรรทัดใหม่ได้
+            document.getElementById('modalDesc').innerHTML = desc;
             document.getElementById('customModal').style.display = 'flex';
         }
 
-        // ฟังก์ชันปิด Modal
         function closeModal() {
             document.getElementById('customModal').style.display = 'none';
+            
+            // ถ้ากดมาจากปุ่ม Yes (isSuccess = true) ให้เด้งกลับหน้าหลัก
+            if (isSuccess) {
+                window.location.href = "index.html"; 
+            }
         }
 
-        // ฟังก์ชันทำให้ปุ่มหนี (PC)
         function moveBtn(btn) {
             const x = Math.random() * 200 - 100;
             const y = Math.random() * 200 - 100;
             btn.style.transform = `translate(${x}px, ${y}px)`;
         }
 
-        // ฟังก์ชันยิงพลุกระดาษ (Confetti)
         function launchConfetti() {
             var duration = 3 * 1000;
             var animationEnd = Date.now() + duration;
             var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 999 };
 
-            function randomInOut(min, max) {
-                return Math.random() * (max - min) + min;
-            }
+            function randomInOut(min, max) { return Math.random() * (max - min) + min; }
 
             var interval = setInterval(function() {
                 var timeLeft = animationEnd - Date.now();
-
-                if (timeLeft <= 0) {
-                    return clearInterval(interval);
-                }
-
+                if (timeLeft <= 0) return clearInterval(interval);
                 var particleCount = 50 * (timeLeft / duration);
-                
-                // ยิงพลุจาก 2 ข้างจอ
                 confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInOut(0.1, 0.3), y: Math.random() - 0.2 } }));
                 confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInOut(0.7, 0.9), y: Math.random() - 0.2 } }));
             }, 250);
