@@ -13,9 +13,10 @@
             text-align: center;
             padding: 50px;
             margin: 0;
-            overflow: hidden; /* ป้องกันไม่ให้มี Scrollbar เกิน */
+            overflow: hidden; /* ห้ามเลื่อนหน้าจอ */
         }
 
+        /* --- ส่วนเนื้อหา (อยู่หน้าสุด) --- */
         .container {
             background: white;
             max-width: 400px;
@@ -25,7 +26,7 @@
             box-shadow: 0 10px 25px rgba(255, 105, 180, 0.3);
             border: 3px solid #ff8fab;
             position: relative;
-            z-index: 10; /* ให้กล่องเนื้อหาอยู่เหนือหัวใจ */
+            z-index: 10; /* ให้กล่องลอยอยู่เหนือหัวใจ */
         }
 
         h1 { color: #d63384; margin-bottom: 10px; }
@@ -46,47 +47,47 @@
 
         .menu-btn:hover {
             background: #fb6f92;
-            transform: scale(1.05); /* ขยายใหญ่ขึ้นตอนเอาเมาส์ชี้ */
+            transform: scale(1.05);
         }
 
-        /* --- ส่วน Animation หัวใจลอย --- */
+        /* --- ส่วน Animation หัวใจลอย (อยู่หลังสุด) --- */
         .bg-animation {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1; /* อยู่ข้างหลังสุด */
-            pointer-events: none; /* กดทะลุได้ ไม่บังปุ่ม */
+            z-index: 1; /* อยู่ข้างหลังเนื้อหา */
+            pointer-events: none; /* กดทะลุได้ */
         }
 
         .heart {
             position: absolute;
-            bottom: -50px;
-            background-color: rgba(255, 182, 193, 0.6); /* สีชมพูจางๆ */
+            bottom: -50px; /* เริ่มต้นจากใต้จอ */
             width: 20px;
             height: 20px;
+            background-color: rgba(255, 192, 203, 0.8);
             transform: rotate(45deg);
-            animation: floatUp 10s linear infinite;
+            animation: floatUp linear infinite;
         }
 
-        /* สร้างรูปทรงหัวใจด้วย CSS */
+        /* วาดรูปหัวใจ */
         .heart::before, .heart::after {
             content: "";
             position: absolute;
-            width: 20px;
-            height: 20px;
+            width: 100%;
+            height: 100%;
             background-color: inherit;
             border-radius: 50%;
         }
+        .heart::before { top: -50%; left: 0; }
+        .heart::after { top: 0; left: -50%; }
 
-        .heart::before { top: -10px; left: 0; }
-        .heart::after { top: 0; left: -10px; }
-
+        /* Animation ลอยขึ้น */
         @keyframes floatUp {
-            0% { transform: translateY(0) rotate(45deg) scale(0.5); opacity: 0; }
-            20% { opacity: 0.8; }
-            100% { transform: translateY(-100vh) rotate(45deg) scale(1.2); opacity: 0; }
+            0% { transform: rotate(45deg) translateY(0) scale(1); opacity: 0; }
+            20% { opacity: 0.8; } /* โผล่มาตอน 20% ของทาง */
+            100% { transform: rotate(45deg) translateY(-120vh) scale(1.2); opacity: 0; }
         }
     </style>
 </head>
@@ -95,7 +96,6 @@
     <div class="bg-animation" id="bgAnimation"></div>
 
     <div class="container">
-        
         <h1>Welcome, Khun Nunt! 🤍</h1>
         <p>ยินดีต้อนรับเข้าสู่โลกของเฟิสท์<br>กรุณาเลือกเมนูที่ต้องการ:</p>
 
@@ -106,24 +106,29 @@
 
     <script>
         const bg = document.getElementById('bgAnimation');
-        const heartCount = 20; // จำนวนหัวใจที่จะลอยขึ้นมา (อยากได้เยอะแก้เลขตรงนี้)
+        const heartCount = 25; // จำนวนหัวใจ (เพิ่มได้)
+
+        // สีหัวใจหลายๆ เฉด (ชมพู, แดงอ่อน, ม่วงอ่อน)
+        const colors = ['#ffb7c5', '#ffccd5', '#ff8fab', '#ffc2d1', '#e0b0ff'];
 
         for (let i = 0; i < heartCount; i++) {
             const heart = document.createElement('div');
             heart.classList.add('heart');
             
-            // สุ่มตำแหน่งเริ่ม (ซ้าย-ขวา)
+            // 1. สุ่มตำแหน่งแนวนอน (0-100% ของจอ)
             heart.style.left = Math.random() * 100 + 'vw';
             
-            // สุ่มความเร็ว (ลอยช้า-เร็วต่างกัน)
+            // 2. สุ่มความเร็ว (ลอยช้า-เร็ว ไม่เท่ากัน)
             heart.style.animationDuration = Math.random() * 5 + 6 + 's'; 
             
-            // สุ่มเวลาเริ่ม (ไม่ให้ขึ้นพร้อมกันหมด)
+            // 3. สุ่มเวลาเริ่ม (ไม่ให้ขึ้นพร้อมกัน)
             heart.style.animationDelay = Math.random() * 5 + 's';
-            
-            // สุ่มขนาดเล็ก-ใหญ่
-            const scale = Math.random() * 0.5 + 0.5; // ขนาด 0.5 ถึง 1.0
-            heart.style.transform = `rotate(45deg) scale(${scale})`;
+
+            // 4. สุ่มสี
+            heart.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+            // 5. สุ่มขนาด (ใช้ zoom แทน transform เพื่อไม่ให้ตีกับ Animation)
+            heart.style.zoom = Math.random() * 0.8 + 0.5; // ขนาด 0.5 ถึง 1.3 เท่า
 
             bg.appendChild(heart);
         }
